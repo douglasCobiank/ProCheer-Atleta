@@ -1,0 +1,6 @@
+@Atleta.Api_HostAddress = http://localhost:5161
+
+GET {{Atleta.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -1,0 +1,15 @@
+/Users/douglascobiank/ProChamp/Backend/Atleta/Atleta.Core/bin/Debug/net9.0/Atleta.Core.deps.json
+/Users/douglascobiank/ProChamp/Backend/Atleta/Atleta.Core/bin/Debug/net9.0/Atleta.Core.dll
+/Users/douglascobiank/ProChamp/Backend/Atleta/Atleta.Core/bin/Debug/net9.0/Atleta.Core.pdb
+/Users/douglascobiank/ProChamp/Backend/Atleta/Atleta.Core/bin/Debug/net9.0/Atleta.Infrastructure.dll
+/Users/douglascobiank/ProChamp/Backend/Atleta/Atleta.Core/bin/Debug/net9.0/Atleta.Infrastructure.pdb
+/Users/douglascobiank/ProChamp/Backend/Atleta/Atleta.Core/obj/Debug/net9.0/Atleta.Core.csproj.AssemblyReference.cache
+/Users/douglascobiank/ProChamp/Backend/Atleta/Atleta.Core/obj/Debug/net9.0/Atleta.Core.GeneratedMSBuildEditorConfig.editorconfig
+/Users/douglascobiank/ProChamp/Backend/Atleta/Atleta.Core/obj/Debug/net9.0/Atleta.Core.AssemblyInfoInputs.cache
+/Users/douglascobiank/ProChamp/Backend/Atleta/Atleta.Core/obj/Debug/net9.0/Atleta.Core.AssemblyInfo.cs
+/Users/douglascobiank/ProChamp/Backend/Atleta/Atleta.Core/obj/Debug/net9.0/Atleta.Core.csproj.CoreCompileInputs.cache
+/Users/douglascobiank/ProChamp/Backend/Atleta/Atleta.Core/obj/Debug/net9.0/Atleta.C.55B6FBB5.Up2Date
+/Users/douglascobiank/ProChamp/Backend/Atleta/Atleta.Core/obj/Debug/net9.0/Atleta.Core.dll
+/Users/douglascobiank/ProChamp/Backend/Atleta/Atleta.Core/obj/Debug/net9.0/refint/Atleta.Core.dll
+/Users/douglascobiank/ProChamp/Backend/Atleta/Atleta.Core/obj/Debug/net9.0/Atleta.Core.pdb
+/Users/douglascobiank/ProChamp/Backend/Atleta/Atleta.Core/obj/Debug/net9.0/ref/Atleta.Core.dll
