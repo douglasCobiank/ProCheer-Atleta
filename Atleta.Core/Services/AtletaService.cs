@@ -30,17 +30,24 @@ namespace Atleta.Core.Services
         {
             _logger.LogInformation("Iniciando cadastro de atleta: {Nome}", atletaDto.Usuario.Nome);
 
-            var ginasios = await ObterOuCriarGinasiosAsync(atletaDto.Ginasio);
-            atletaDto.Ginasio = ginasios.ToList();
+            atletaDto.Ginasio = await ObterOuCriarGinasiosAsync(atletaDto.Ginasio);
+            
+            atletaDto.Usuario = await GarantirUsuarioExistente(atletaDto);
+            atletaDto.UsuarioId = atletaDto.Usuario.UsuarioId;
 
             var atletaData = MapearAtleta(atletaDto);
-            var usuario = await GarantirUsuarioExistente(atletaDto);
 
-            atletaData.UsuarioId = usuario?.UsuarioId ?? 0;
-            atletaData.Usuario = _mapper.Map<UsuarioData>(usuario);
-
+            atletaDto.Ginasio.ForEach(a =>
+            {
+                atletaData.AtletaGinasios.Add(new AtletaGinasio
+                {
+                    Atleta = atletaData,
+                    Ginasio = _mapper.Map<GinasioData>(a)
+                });
+            });
+            
             await _atletaRepository.AddAsync(atletaData);
-            await AtualizarCache(atletaDto.Usuario.Nome, atletaData);
+            await AtualizarCache(atletaDto.Usuario.Nome, atletaDto);
 
             _logger.LogInformation("Atleta {Nome} cadastrado com sucesso", atletaDto.Usuario.Nome);
         }
@@ -56,7 +63,7 @@ namespace Atleta.Core.Services
                 return;
             }
 
-            var usuario = (await _usuarioService.GetUsuarioPorIdAsync(atleta.UsuarioId)).FirstOrDefault();
+            var usuario = (await _usuarioService.GetUsuarioPorIdAsync(atleta.Usuario.UsuarioId)).FirstOrDefault();
             await RemoverCache(usuario?.Nome);
 
             await _atletaRepository.DeleteAsync(atleta);
@@ -92,13 +99,7 @@ namespace Atleta.Core.Services
 
             var atletas = await _atletaRepository.GetAllWithIncludeAsync();
 
-            foreach (var atleta in atletas)
-            {
-                var usuario = (await _usuarioService.GetUsuarioPorIdAsync(atleta.UsuarioId)).FirstOrDefault();
-                atleta.Usuario = _mapper.Map<UsuarioData>(usuario);
 
-                atleta.Ginasio = (await CarregarGinasios(atleta.GinasioId)).ToList();
-            }
 
             var atletasDto = _mapper.Map<List<AtletasDto>>(atletas);
             await _cacheService.SetAsync(cacheKey, atletasDto, TimeSpan.FromMinutes(10));
@@ -121,9 +122,6 @@ namespace Atleta.Core.Services
             }
 
             var atleta = await _atletaRepository.GetByIdAsync(usuario.UsuarioId);
-            atleta.Usuario = _mapper.Map<UsuarioData>(usuario);
-            atleta.UsuarioId = usuario.UsuarioId;
-            atleta.Ginasio = (await CarregarGinasios(atleta.GinasioId)).ToList();
 
             var dto = _mapper.Map<AtletasDto>(atleta);
             await _cacheService.SetAsync(cacheKey, dto, TimeSpan.FromMinutes(10));
@@ -152,7 +150,6 @@ namespace Atleta.Core.Services
         {
             var atleta = _mapper.Map<AtletaData>(dto);
             atleta.ImagemAtleta = string.Empty;
-            atleta.GinasioId = dto.Ginasio.Select(g => g.Id).ToList();
             return atleta;
         }
 
@@ -170,10 +167,10 @@ namespace Atleta.Core.Services
                    .FirstOrDefault();
         }
 
-        private async Task AtualizarCache(string nome, AtletaData atleta)
+        private async Task AtualizarCache(string nome, AtletasDto atletaDto)
         {
             await RemoverCache(nome);
-            _mensageria.PublicarMensagem("atualizar-cache", atleta);
+            _mensageria.PublicarMensagem("atualizar-cache", atletaDto);
         }
 
         private async Task RemoverCache(string nome)
@@ -195,26 +192,27 @@ namespace Atleta.Core.Services
             return ginasios;
         }
 
-        private async Task<IEnumerable<GinasioDto>> ObterOuCriarGinasiosAsync(IEnumerable<GinasioDto> ginasiosDto)
+        private async Task<List<GinasioDto>> ObterOuCriarGinasiosAsync(List<GinasioDto> ginasiosDto)
         {
-            if (ginasiosDto is null || !ginasiosDto.Any())
-                return Enumerable.Empty<GinasioDto>();
+            if (ginasiosDto is null || ginasiosDto.Count == 0)
+                return new List<GinasioDto>();
 
-            var ginasiosExistentes = await Task.WhenAll(
-                ginasiosDto.Select(async g =>
-                    (await _ginasioService.GetGinasioPorNomeAsync(g.Nome)).FirstOrDefault()));
+            var tasks = ginasiosDto.Select(async ginasio =>
+            {
+                var existente = (await _ginasioService.GetGinasioPorNomeAsync(ginasio.Nome)).FirstOrDefault();
 
-            var naoCadastrados = ginasiosDto
-                .Where(g => ginasiosExistentes.All(e => e == null || e.Nome != g.Nome));
+                if (existente == null)
+                {
+                    await CadastrarGinasioAsync(ginasio);
+                    existente = (await _ginasioService.GetGinasioPorNomeAsync(ginasio.Nome)).FirstOrDefault();
+                }
 
-            foreach (var novo in naoCadastrados)
-                await CadastrarGinasioAsync(novo);
+                return existente!;
+            });
 
-            var ginasiosAtualizados = await Task.WhenAll(
-                ginasiosDto.Select(async g => (await _ginasioService.GetGinasioPorNomeAsync(g.Nome)).FirstOrDefault()));
-
-            return ginasiosAtualizados.Where(g => g is not null)!;
+            return (await Task.WhenAll(tasks)).Where(x => x != null).ToList();
         }
+
 
         private async Task CadastrarUsuarioAsync(AtletasDto dto)
         {

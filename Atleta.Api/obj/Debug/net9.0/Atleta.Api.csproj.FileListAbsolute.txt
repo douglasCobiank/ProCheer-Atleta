@@ -150,3 +150,4 @@
 /Users/douglascobiank/ProChamp/Backend/Atleta/Atleta.Api/bin/Debug/net9.0/Pipelines.Sockets.Unofficial.dll
 /Users/douglascobiank/ProChamp/Backend/Atleta/Atleta.Api/bin/Debug/net9.0/StackExchange.Redis.dll
 /Users/douglascobiank/ProChamp/Backend/Atleta/Atleta.Api/bin/Debug/net9.0/RabbitMQ.Client.dll
+/Users/douglascobiank/ProChamp/Backend/Atleta/Atleta.Api/obj/Debug/net9.0/Atleta.Api.sourcelink.json

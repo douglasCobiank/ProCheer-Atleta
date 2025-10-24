@@ -10,7 +10,6 @@ namespace Atleta.Core.Mappers
         {
             CreateMap<AtletasDto, AtletaData>()
             .ForMember(dest => dest.Id, opt => opt.Ignore())          // Id será gerado pelo banco
-            .ForMember(dest => dest.Usuario, opt => opt.Ignore())    // Não mapeia a entidade de outro serviço
             //.ForMember(dest => dest.Ginasios, opt => opt.MapFrom(src => src.Ginasio.Select(g => new GinasioData { Id = g.Id }))) 
             .ForMember(dest => dest.Documento, opt => opt.MapFrom(src => src.Documento)).ReverseMap();
 
@@ -19,6 +18,8 @@ namespace Atleta.Core.Mappers
 
             // Se precisar mapear GinasioDto para GinasioData
             CreateMap<GinasioDto, GinasioData>().ReverseMap();
+
+            CreateMap<GinasioData, GinasioDto>().ReverseMap();
 
             CreateMap<EnderecoData, EnderecoDto>().ReverseMap();
 

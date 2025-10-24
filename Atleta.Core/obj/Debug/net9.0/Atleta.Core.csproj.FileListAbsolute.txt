@@ -13,3 +13,4 @@
 /Users/douglascobiank/ProChamp/Backend/Atleta/Atleta.Core/obj/Debug/net9.0/refint/Atleta.Core.dll
 /Users/douglascobiank/ProChamp/Backend/Atleta/Atleta.Core/obj/Debug/net9.0/Atleta.Core.pdb
 /Users/douglascobiank/ProChamp/Backend/Atleta/Atleta.Core/obj/Debug/net9.0/ref/Atleta.Core.dll
+/Users/douglascobiank/ProChamp/Backend/Atleta/Atleta.Core/obj/Debug/net9.0/Atleta.Core.sourcelink.json

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Atleta.Api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f536d9477970b05d0437572e90c27307e79b5374")]
 [assembly: System.Reflection.AssemblyProductAttribute("Atleta.Api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Atleta.Api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
